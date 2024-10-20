@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Confirmar Reserva{% endblock %}
+
+{% block content %}
+    <h2 class="mb-4">Confirmação de Condições para Reserva</h2>
+    
+    <form action="{{ url_for('processar_confirmacao') }}" method="POST">
+        <input type="hidden" name="data" value="{{ data }}">
+        <input type="hidden" name="hora_inicio" value="{{ hora_inicio }}">
+        <input type="hidden" name="hora_fim" value="{{ hora_fim }}">
+        <input type="hidden" name="tipo_reserva" value="{{ tipo_reserva }}">
+        
+        <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" id="confirmacao_1" name="confirmacao_1" required>
+            <label class="form-check-label" for="confirmacao_1">
+                Estou ciente que a reserva efetuada NÃO contempla o direito de utilização da área da piscina pelos convidados do evento. Assim, está PROIBIDA a utilização da ÁREA DA PISCINA pelos convidados!
+            </label>
+        </div>
+
+        <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" id="confirmacao_2" name="confirmacao_2" required>
+            <label class="form-check-label" for="confirmacao_2">
+                Estou ciente que deverei zelar pela limpeza e organização do local após a utilização. *Vamos pensar no próximo!
+            </label>
+        </div>
+
+        <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" id="confirmacao_3" name="confirmacao_3" required>
+            <label class="form-check-label" for="confirmacao_3">
+                Estou ciente de que a depender do porte do evento as seguintes ações deverão ser tomadas:
+                <ul>
+                    <li>A) Até 10 convidados: autorização do responsável, direto com os portões;</li>
+                    <li>B) De 11 a 20 convidados: enviar e-mail com a relação dos participantes e o descritivo do evento (modelos disponíveis na seção 'Modelos') para <a href="mailto:credenciamento.gsdsp.basp@fab.mil.br">credenciamento.gsdsp.basp@fab.mil.br</a> e <a href="mailto:oberdanojs@fab.mil.br">oberdanojs@fab.mil.br</a> com dados do evento;</li>
+                    <li>C) A partir de 21 convidados: solicitar diretamente ao Cmt da BASP, via e-mail <a href="mailto:gab.cmt.basp@fab.mil.br">gab.cmt.basp@fab.mil.br</a> com 5 dias úteis de antecedência. Encaminhar a relação dos participantes e o descritivo do evento (modelos disponíveis na seção 'Modelos').</li>
+                </ul>
+            </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Confirmar Reserva</button>
+    </form>
+{% endblock %}

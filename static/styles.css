@@ -1,0 +1,266 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+
+.logout-button {
+    background-color: #ff4d4d; /* Vermelho para destaque */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.logout-button:hover {
+    background-color: #e60000; /* Tom mais escuro ao passar o mouse */
+}
+
+/* Alinha o conteúdo dos eventos e permite quebra de linha */
+.event-content {
+    white-space: normal;  /* Permite a quebra de linha */
+    word-wrap: break-word;  /* Garante a quebra de palavras longas */
+    font-size: 0.85rem;  /* Ajusta o tamanho da fonte para melhorar em mobile */
+}
+
+/* Adicionalmente, ajuste o comportamento das células em telas menores */
+@media (max-width: 768px) {
+    .fc-daygrid-event {
+        font-size: 0.75rem;  /* Reduz um pouco o tamanho da fonte em dispositivos menores */
+        line-height: 1.2;  /* Ajusta o espaçamento vertical para manter legível */
+    }
+}
+
+/* Estilo geral do sidebar */
+.sidebar {
+    width: 250px;
+    background-color: #343a40;
+    color: white;
+    transition: all 0.3s;
+}
+
+/* Esconde o sidebar em telas menores */
+.sidebar.active {
+    margin-left: -250px;  /* Esconde a barra lateral */
+}
+
+/* Para telas grandes, a barra lateral sempre estará visível */
+@media (min-width: 992px) {
+    .sidebar {
+        margin-left: 0;
+    }
+}
+
+.sidebar-header {
+    padding: 20px;
+    background-color: #23272b;
+}
+
+.sidebar ul.components {
+    padding: 0;
+    list-style: none;
+}
+
+.sidebar ul li {
+    padding: 15px;
+    font-size: 16px;
+}
+
+.sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    transition: color 0.2s;
+}
+
+.sidebar ul li a:hover {
+    background-color: #495057;
+}
+
+.sidebar.active {
+    margin-left: -250px;  /* Esconder a barra lateral em mobile */
+}
+
+/* Para telas grandes (desktop), a barra lateral fica sempre visível */
+@media (min-width: 992px) {
+    .sidebar {
+        margin-left: 0;
+    }
+}
+
+/* Estilos para o conteúdo principal */
+#content {
+    width: 100%;
+    padding-left: 20px;
+    transition: all 0.3s;
+}
+
+/* Ajustes para o botão de menu mobile (hamburger) */
+#sidebarCollapse {
+    background-color: #007bff;  /* Cor do botão */
+    color: white;
+    border: none;
+    margin-bottom: 10px;
+    padding: 10px 15px;
+    font-size: 1.2rem;  /* Aumentar o ícone do menu */
+}
+
+#sidebarCollapse:hover {
+    background: #23272b;
+}
+
+/* Ajustes para a tabela moderna */
+.table-responsive {
+    margin-top: 20px;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.05); /* Listras sutis para linhas alternadas */
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.1);  /* Efeito hover nas linhas */
+}
+
+.table th, .table td {
+    vertical-align: middle;  /* Alinhamento vertical centralizado */
+}
+
+/* Ajustes para cabeçalho da tabela */
+.table-dark th {
+    background-color: #343a40;
+    color: white;
+}
+
+/* Ajustes para botões dentro da tabela */
+.btn-sm {
+    font-size: 0.875rem;  /* Tamanho menor para botões */
+    padding: 5px 10px;
+}
+
+/* Estilo para os campos de filtro no cabeçalho da tabela */
+.table thead input[type="text"] {
+    width: 100%;
+    padding: 5px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.table thead input[type="text"]:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+@media (max-width: 768px) {
+    #calendar {
+        font-size: 0.8rem;  /* Ajustar o tamanho da fonte para mobile */
+    }
+}
+
+.card-img-top {
+    width: 100%;
+    height: 200px;  /* Define a altura padrão das imagens */
+    object-fit: cover;  /* Garante que as imagens sejam ajustadas */
+}
+
+@media (max-width: 768px) {
+    .card-img-top {
+        height: 150px;  /* Altura menor para telas pequenas */
+    }
+}
+
+/* Estilo moderno para o header */
+.header {
+    background-color: #343a40; /* Fundo escuro */
+    color: white;  /* Texto branco */
+    border-bottom: 4px solid #007bff; /* Linha de destaque */
+    padding: 20px 30px;  /* Espaçamento interno */
+    position: relative; /* Para centralização relativa do título */
+}
+
+/* Estilo para o logo */
+.header .logo {
+    height: 100px; /* Define a altura do logo */
+    width: auto;  /* Mantém a proporção da imagem */
+}
+
+/* Estilo moderno para o título */
+.title-container {
+    position: absolute; /* Permite centralizar o título */
+    left: 50%; /* Move o título para o meio do cabeçalho */
+    transform: translateX(-50%); /* Ajusta o título para realmente estar no centro */
+}
+
+/* Estilo moderno para o título */
+.header .title {
+    font-family: 'Roboto', sans-serif;  /* Fonte moderna */
+    font-size: 2.4rem;  /* Tamanho do texto */
+    font-weight: 600;  /* Peso da fonte */
+    letter-spacing: 1.2px;  /* Espaçamento entre as letras */
+    color: white;  /* Cor branca */
+}
+
+/* Estilo responsivo para o header em telas menores */
+@media (max-width: 768px) {
+    .header .title {
+        font-size: 1.8rem;  /* Tamanho menor em mobile */
+    }
+
+    .header .logo {
+        height: 50px;  /* Diminui o tamanho do logo em telas pequenas */
+    }
+}
+
+/* Estilos para login */
+
+.login {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centraliza horizontalmente */
+    justify-content: center; /* Centraliza verticalmente */
+}
+
+h2 {
+    margin-bottom: 20px; /* Espaçamento entre o título e o formulário */
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centraliza os itens do formulário */
+}
+
+label {
+    margin-bottom: 5px; /* Espaçamento entre o rótulo e o campo de entrada */
+}
+
+input {
+    margin-bottom: 2px; /* Espaçamento entre os campos de entrada */
+    padding: 2px;
+    width: 250px; /* Largura do campo de entrada */
+}
+
+button {
+    padding: 5px 10px; /* Padding do botão */
+}
+
+/* Estilo para o nome do usuário no canto superior direito */
+.user-info {
+    position: relative; /* Remove o position absolute */
+    font-size: 1.2rem;  /* Tamanho do texto */
+    color: white;  /* Cor do texto */
+    font-weight: 500;  /* Peso do texto */
+    display: flex;
+    align-items: center;  /* Centraliza verticalmente */
+    margin-right: 20px;  /* Ajusta o espaçamento da borda direita */
+}
+
+/* Media query para esconder o nome do usuário em telas menores */
+@media only screen and (max-width: 768px) {
+    .user-info {
+        display: none !important;  /* Esconde o campo do nome do usuário em telas pequenas */
+    }
+}

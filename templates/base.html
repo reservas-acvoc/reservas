@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Reservas - ACVOC{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/index.global.min.css" rel="stylesheet">
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts for modern typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <!-- Icons (for the hamburger menu) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- Cabeçalho fixo -->
+<header class="header d-flex align-items-center justify-content-between px-4 py-2">
+    <div class="d-flex align-items-center"> <!-- Logo e título agrupados -->
+        <img src="{{ url_for('static', filename='images/dom.jpeg') }}" alt="ACVOC Logo" class="logo">
+    </div>
+    <div class="title-container"> <!-- Novo container para o título -->
+        <h1 class="title">Reservas - ACVOC</h1>
+    </div>
+    {% if session.user_id %}
+        <div class="user-info d-flex align-items-center">
+            Usuário logado: {{ session.apelido }}
+        </div>
+    {% endif %}
+</header>
+
+
+
+<!-- Barra de navegação lateral -->
+<div class="d-flex">
+    {% if session.user_id %}
+        <nav id="sidebar" class="sidebar">
+            <h4 class="sidebar-header">Menu</h4>
+            <ul class="list-unstyled components">
+                <li>
+                    <a href="{{ url_for('home') }}">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('alterar_senha') }}">
+                        <i class="fas fa-key"></i> Alterar Senha
+                    </a>
+                </li>
+
+                {% if session.role == 'admin' %}
+                    <li>
+                        <a href="{{ url_for('reservas_futuras') }}">
+                            <i class="fas fa-calendar-alt"></i> Reservas de Todos
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('gerir_usuarios') }}">
+                            <i class="fas fa-users"></i> Gerir Usuários
+                        </a>
+                    </li>
+                {% endif %}
+
+                <li>
+                    <a href="{{ url_for('instalacoes') }}">
+                        <i class="fas fa-building"></i> Instalações
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('modelos') }}">
+                        <i class="fas fa-file-alt"></i> Modelos
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="logoutLink">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                    <form id="logoutForm" action="{{ url_for('logout') }}" method="POST" style="display: none;"></form>
+                </li>
+            </ul>
+        </nav>
+    {% endif %}
+
+    <!-- Conteúdo principal -->
+    <div id="content" class="p-4">
+        {% if session.user_id %}
+            <!-- Botão para dispositivos móveis (hamburger menu) -->
+            <button type="button" id="sidebarCollapse" class="btn btn-dark d-lg-none">
+                <i class="fas fa-bars"></i>
+            </button>
+        {% endif %}
+        
+        <!-- Conteúdo dinâmico das páginas -->
+        <div class="container">
+            {% block content %}
+            <!-- O conteúdo das páginas será renderizado aqui -->
+            {% endblock %}
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Bootstrap JS and Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
+<!-- Custom JS para esconder/mostrar a barra lateral no mobile -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('sidebarCollapse').addEventListener('click', function() {
+            var sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('active');  // Toggle para mostrar/esconder
+        });
+    });
+</script>
+<script>
+    document.getElementById('logoutLink').addEventListener('click', function(e) {
+        e.preventDefault();  // Previne o comportamento padrão do link
+        document.getElementById('logoutForm').submit();  // Envia o formulário de logout via POST
+    });
+</script>
+
+
+</body>
+</html>

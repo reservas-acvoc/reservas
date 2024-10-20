@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}
+Gerir Usuários - ACVOC
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Gerenciar Usuários</h2>
+
+    <!-- Mensagens de sucesso ou erro -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert alert-info" role="alert">
+                {{ messages[0] }}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Formulário para criar novo usuário -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h3>Criar Novo Usuário</h3>
+            <form action="{{ url_for('gerir_usuarios') }}" method="POST">
+                <div class="mb-3">
+                    <label for="email_novo" class="form-label">E-mail do Novo Usuário:</label>
+                    <input type="email" id="email_novo" name="email_novo" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="apelido_novo" class="form-label">Apelido do Novo Usuário:</label>
+                    <input type="text" id="apelido_novo" name="apelido_novo" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="role_novo" class="form-label">Papel do Novo Usuário:</label>
+                    <select id="role_novo" name="role_novo" class="form-select" required>
+                        <option value="user">Usuário</option>
+                        <option value="admin">Administrador</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Criar Usuário</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Formulário para redefinir senha e/ou atualizar papel -->
+    <div class="card">
+        <div class="card-body">
+            <h3>Redefinir Senha, Alterar Papel e/ou Apelido de Usuário Existente</h3>
+            <form action="{{ url_for('gerir_usuarios') }}" method="POST">
+                <div class="mb-3">
+                    <label for="email_redefinir" class="form-label">E-mail do Usuário:</label>
+                    <input type="email" id="email_redefinir" name="email_redefinir" class="form-control" required>
+                </div>
+
+                <!-- Campo de redefinição de senha opcional -->
+                <div class="form-check mb-3">
+                    <input type="checkbox" class="form-check-input" id="redefinir_senha" name="redefinir_senha">
+                    <label for="redefinir_senha" class="form-check-label">Redefinir Senha para "acvoc2024"</label>
+                </div>
+
+                <!-- Campo para alterar o apelido -->
+                <div class="mb-3">
+                    <label for="apelido_atualizar" class="form-label">Novo Apelido do Usuário (Opcional):</label>
+                    <input type="text" id="apelido_atualizar" name="apelido_atualizar" class="form-control">
+                </div>
+
+                <!-- Campo para alterar o papel do usuário -->
+                <div class="mb-3">
+                    <label for="role_atualizar" class="form-label">Atualizar Papel do Usuário (Opcional):</label>
+                    <select id="role_atualizar" name="role_atualizar" class="form-select">
+                        <option value="">Não alterar</option>
+                        <option value="user">Usuário</option>
+                        <option value="admin">Administrador</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-warning">Atualizar</button>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Tabela para exibir os usuários existentes -->
+    <div class="card mt-4">
+        <div class="card-body">
+            <h3>Usuários Existentes</h3>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>E-mail</th>
+                        <th>Apelido</th>
+                        <th>Papel</th>
+                        <th>Ações</th> <!-- Nova coluna para Ações -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for uid, usuario in usuarios.items() %}
+                        <tr>
+                            <td>{{ usuario.email }}</td>
+                            <td>{{ usuario.apelido }}</td>
+                            <td>{{ usuario.role }}</td>
+                            <td>
+                                <!-- Botão de Excluir Usuário -->
+                                <form action="{{ url_for('excluir_usuario', uid=uid) }}" method="POST" style="display:inline;">
+                                    <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

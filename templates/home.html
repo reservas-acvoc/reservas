@@ -1,0 +1,396 @@
+{% extends "base.html" %}
+
+{% block title %}
+Home - Reservas ACVOC
+{% endblock %}
+
+{% block content %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert alert-warning" role="alert">
+            {{ messages[0] }}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="container mt-5">
+        
+        <!-- Calendário de Reservas -->
+        <h2>Calendário de Reservas</h2>
+        <!-- Legenda com Filtro -->
+        <div class="legenda mt-4">
+            <h4>Filtrar Tipos de Reservas</h4>
+            <div class="d-flex flex-wrap">
+                <!-- Checkbox para Quadra de Tênis -->
+                <div class="legenda-item">
+                    <label for="filtro-tenis">
+                        <input type="checkbox" id="filtro-tenis" class="filtro-tipo" data-tipo="tenis" checked>
+                        <span class="legenda-cor" style="background-color: #90EE90;"></span> Quadra de Tênis
+                    </label>
+                </div>
+
+                <!-- Checkbox para Quadra Poliesportiva -->
+                <div class="legenda-item">
+                    <label for="filtro-poliesportiva">
+                        <input type="checkbox" id="filtro-poliesportiva" class="filtro-tipo" data-tipo="poliesportiva" checked>
+                        <span class="legenda-cor" style="background-color: #F08080;"></span> Quadra Poliesportiva
+                    </label>
+                </div>
+
+                <!-- Checkbox para Salão de Festas -->
+                <div class="legenda-item">
+                    <label for="filtro-salao">
+                        <input type="checkbox" id="filtro-salao" class="filtro-tipo" data-tipo="salao" checked>
+                        <span class="legenda-cor" style="background-color: #F0CCA1;"></span> Salão de Festas
+                    </label>
+                </div>
+
+                <!-- Checkbox para Churrasqueira da Piscina -->
+                <div class="legenda-item">
+                    <label for="filtro-ch-piscina">
+                        <input type="checkbox" id="filtro-ch-piscina" class="filtro-tipo" data-tipo="ch_piscina" checked>
+                        <span class="legenda-cor" style="background-color: #ADD8E6;"></span> Churrasqueira da Piscina
+                    </label>
+                </div>
+
+                <!-- Checkbox para Churrasqueira do Estacionamento -->
+                <div class="legenda-item">
+                    <label for="filtro-ch-estac">
+                        <input type="checkbox" id="filtro-ch-estac" class="filtro-tipo" data-tipo="ch_estac" checked>
+                        <span class="legenda-cor" style="background-color: #D3D3D3;"></span> Churrasqueira do Estacionamento
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div id="calendar"></div>
+
+        <br>
+
+        <!-- Lista das minhas reservas -->
+        <h2 class="mb-4">Minhas Reservas</h2>
+
+        {% if reservas_filtradas %}
+            <div class="table-responsive">
+                <table id="minhasReservasTable" class="table table-striped table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Data</th>
+                            <th>Horário</th>
+                            <th>Tipo de Reserva</th>
+                            <th>Ações</th>
+                        </tr>
+                        <!-- Filtros no cabeçalho -->
+                        <tr>
+                            <th><input type="text" id="filtroData" class="form-control" placeholder="Filtrar Data"></th>
+                            <th><input type="text" id="filtroHorario" class="form-control" placeholder="Filtrar Horário"></th>
+                            <th><input type="text" id="filtroTipo" class="form-control" placeholder="Filtrar Tipo"></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for key, reserva in reservas_filtradas.items() %}
+                            <tr>
+                                <td>{{ reserva.data }}</td>
+                                <td>{{ reserva.hora_inicio }} - {{ reserva.hora_fim }}</td>
+                                <td>{{ reserva.tipo_reserva | capitalize }}</td>
+                                <td>
+                                    <!-- Botão para excluir a reserva -->
+                                    <form action="{{ url_for('remover_reserva', id=key) }}" method="POST" style="display:inline;">
+                                        <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p>Nenhuma reserva encontrada.</p>
+        {% endif %}
+
+
+        <!-- Formulário para nova reserva -->
+        <br>
+        <div class="card mt-4">
+            <div class="card-body">
+                <h2 class="card-title">Adicionar Nova Reserva</h2>
+                <form action="{{ url_for('nova_reserva') }}" method="POST">
+                    <div class="mb-3">
+                        <label for="data" class="form-label">Data:</label>
+                        <input type="date" id="data" name="data" class="form-control" required min="{{ date_today }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="hora_inicio" class="form-label">Horário de Início:</label>
+                        <input type="time" id="hora_inicio" name="hora_inicio" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="hora_fim" class="form-label">Horário de Término:</label>
+                        <input type="time" id="hora_fim" name="hora_fim" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="tipo_reserva" class="form-label">Tipo de Reserva:</label>
+                        <select id="tipo_reserva" name="tipo_reserva" class="form-select" required>
+                            <option value="tenis">Quadra de Tênis</option>
+                            <option value="poliesportiva">Quadra Poliesportiva</option>
+                            <option value="salao">Salão de Festas</option>
+                            <option value="ch_piscina">Churrasqueira da Piscina</option>
+                            <option value="ch_estac">Churrasqueira do Estacionamento</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Adicionar</button>
+                </form>
+            </div>
+        </div>
+
+
+        <hr>
+
+        
+    </div>
+
+    <!-- Modal de Detalhes da Reserva -->
+    <div class="modal fade" id="detalhesReservaModal" tabindex="-1" aria-labelledby="detalhesReservaModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="detalhesReservaModalLabel">Detalhes da Reserva</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            <!-- Detalhes da reserva aparecerão aqui -->
+            <p><strong>Nome:</strong> <span id="detalhe-nome"></span></p>
+            <p><strong>Tipo de Reserva:</strong> <span id="detalhe-tipo"></span></p>
+            <p><strong>Data:</strong> <span id="detalhe-data"></span></p>
+            <p><strong>Horário:</strong> <span id="detalhe-horario"></span></p>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+        </div>
+    </div>
+    
+    <!-- CSS para ajustar visualização em dispositivos móveis -->
+    <style>
+        @media (max-width: 768px) {
+        .event-content {
+            font-size: 0.9rem;  /* Diminuir o tamanho do texto em dispositivos móveis */
+        }
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/index.global.min.js"></script>
+    <style>
+        .event-content {
+            text-align: left; /* Alinha o texto à esquerda */
+        }
+        .legenda-item {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+            margin-bottom: 10px;
+        }
+
+        .legenda-cor {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            border: 1px solid #000;
+            position: relative;
+        }
+
+        .legenda-item input[type="checkbox"] {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            opacity: 0;  /* Deixar o checkbox invisível */
+            cursor: pointer;
+        }
+
+        .legenda-item label {
+            position: relative;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        /* Adicionar um estilo customizado quando o checkbox for marcado */
+        .legenda-item input[type="checkbox"]:checked + .legenda-cor::after {
+            content: '✓';
+            color: black;
+            position: absolute;
+            top: 1px;
+            left: 3px;
+            font-size: 16px;
+        }
+    </style>
+    <style>
+        {% for key, reserva in todas_reservas.items() %}
+            .reserva-{{ key }} {
+                background-color: {{ reserva.cor }} !important;
+                border-color: {{ reserva.cor }} !important;
+                color: #000 !important;  /* Definir cor do texto, se necessário */
+            }
+        {% endfor %}
+
+        .event-content {
+            text-align: left;  /* Alinhar o texto à esquerda */
+            white-space: normal;  /* Permitir quebra de linha */
+            word-wrap: break-word;  /* Quebrar a palavra se ultrapassar o limite da célula */
+        }
+        .event-content i {
+            font-style: italic;  /* Exibir o tipo de reserva em itálico */
+            word-wrap: break-word;  /* Quebrar a palavra se ultrapassar o limite da célula */
+        }
+        
+        /* Remover sublinhado e mudar cor das datas e dos dias da semana */
+        .fc-daygrid-day-number,  /* Números das datas */
+        .fc-col-header-cell-cushion {  /* Dias da semana */
+            color: black !important;  /* Mudar a cor para preto */
+            text-decoration: none !important;  /* Remover sublinhado */
+        }
+
+        /* Adicionar hover para um visual mais elegante (opcional) */
+        .fc-daygrid-day-number:hover,
+        .fc-col-header-cell-cushion:hover {
+            text-decoration: underline;  /* Adicionar sublinhado no hover, se desejado */
+            cursor: pointer;  /* Mostrar o cursor de link */
+        }
+    </style>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var tiposSelecionados = [];  // Inicializamos o array para o filtro
+    
+            // Inicializar o calendário
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'pt-br',
+                eventContent: function(arg) {
+                    var titleParts = arg.event.title.split(' - ');
+    
+                    // Detectar se é uma tela pequena (móvel)
+                    var isMobile = window.innerWidth <= 768;
+    
+                    // Se for móvel, mostrar apenas o nome. Em telas maiores, mostrar os detalhes completos
+                    var customHtml = `
+                        <div class="event-content">
+                            <b>${titleParts[0]}</b>  <!-- Mostrar apenas o nome em mobile -->
+                            ${!isMobile ? `<br><i>${arg.event.extendedProps.tipo_reserva}</i><br>${titleParts[1]}` : ''}  
+                            <!-- Mostrar detalhes em telas grandes, ocultar em telas pequenas -->
+                        </div>
+                    `;
+                    return { html: customHtml };
+                },
+                events: [
+                    {% if todas_reservas %}
+                        {% for key, reserva in todas_reservas.items() %}
+                            {
+                                title: '{{ reserva.nome }} - {{ reserva.hora_inicio }} às {{ reserva.hora_fim }}',
+                                start: '{{ reserva.data }}T{{ reserva.hora_inicio }}',
+                                end: '{{ reserva.data }}T{{ reserva.hora_fim }}',
+                                backgroundColor: '{{ reserva.cor }}',  // Definir a cor de fundo
+                                borderColor: '{{ reserva.cor }}',  // Cor da borda opcional
+                                classNames: ['reserva-{{ key }}'],  // Usar a classe CSS gerada
+                                extendedProps: {
+                                    tipo_reserva: '{{ reserva.tipo_reserva }}',  // Passar o tipo de reserva
+                                    nome: '{{ reserva.nome }}',  // Nome do reservante
+                                    data: '{{ reserva.data }}',
+                                    horario: '{{ reserva.hora_inicio }} às {{ reserva.hora_fim }}'
+                                }
+                            },
+                        {% endfor %}
+                    {% endif %}
+                ],
+                eventClick: function(info) {
+                    var isMobile = window.innerWidth <= 768;
+    
+                    if (isMobile) {
+                        // Em telas pequenas, abrir modal ao invés de expandir
+                        var modal = new bootstrap.Modal(document.getElementById('detalhesReservaModal'), {
+                            keyboard: true
+                        });
+    
+                        // Preencher o modal com os detalhes da reserva
+                        document.getElementById('detalhe-nome').innerText = info.event.extendedProps.nome;
+                        document.getElementById('detalhe-tipo').innerText = info.event.extendedProps.tipo_reserva;
+                        document.getElementById('detalhe-data').innerText = info.event.extendedProps.data;
+                        document.getElementById('detalhe-horario').innerText = info.event.extendedProps.horario;
+    
+                        modal.show();  // Mostrar o modal
+                    }
+                }
+            });
+    
+            // Função para atualizar o filtro com base nas caixas de seleção
+            function atualizarFiltro() {
+                tiposSelecionados = [];
+                document.querySelectorAll('.filtro-tipo:checked').forEach(function(checkbox) {
+                    tiposSelecionados.push(checkbox.getAttribute('data-tipo'));
+                });
+    
+                calendar.getEvents().forEach(function(event) {
+                    // Se o tipo da reserva estiver selecionado, mostramos o evento, caso contrário, escondemos
+                    if (tiposSelecionados.includes(event.extendedProps.tipo_reserva)) {
+                        event.setProp('display', 'auto');  // Mostrar o evento
+                    } else {
+                        event.setProp('display', 'none');  // Esconder o evento
+                    }
+                });
+            }
+    
+            // Monitorar mudanças nas caixas de seleção para atualizar o filtro
+            document.querySelectorAll('.filtro-tipo').forEach(function(checkbox) {
+                checkbox.addEventListener('change', atualizarFiltro);
+            });
+    
+            // Renderizar o calendário
+            calendar.render();
+        });
+    </script>
+    
+    
+    
+
+    <!-- Script para aplicar o filtro na tabela -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            // Filtro por Data
+            document.getElementById('filtroData').addEventListener('keyup', function () {
+                filtrarTabela(1, this.value);
+            });
+
+            // Filtro por Horário
+            document.getElementById('filtroHorario').addEventListener('keyup', function () {
+                filtrarTabela(2, this.value);
+            });
+
+            // Filtro por Tipo de Reserva
+            document.getElementById('filtroTipo').addEventListener('keyup', function () {
+                filtrarTabela(3, this.value);
+            });
+
+            // Função para filtrar a tabela
+            function filtrarTabela(coluna, valorFiltro) {
+                var tabela = document.getElementById("minhasReservasTable");
+                var linhas = tabela.getElementsByTagName("tr");
+
+                for (var i = 2; i < linhas.length; i++) {  // Começa a partir da 3ª linha (pulando o cabeçalho)
+                    var celulas = linhas[i].getElementsByTagName("td");
+                    if (celulas) {
+                        var valorCelula = celulas[coluna].textContent || celulas[coluna].innerText;
+                        if (valorCelula.toUpperCase().indexOf(valorFiltro.toUpperCase()) > -1) {
+                            linhas[i].style.display = "";
+                        } else {
+                            linhas[i].style.display = "none";
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+         
+{% endblock %}
