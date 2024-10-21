@@ -1,7 +1,6 @@
 CacheControl==0.14.0
 cachelib==0.13.0
 cachetools==5.3.3
-cryptography==43.0.1
 firebase-admin==6.5.0
 Flask==3.0.3
 Flask-Login==0.6.3
