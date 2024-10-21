@@ -494,6 +494,60 @@ def instalacoes():
 
     return render_template('instalacoes.html', instalacoes=instalacoes)
 
+@app.route('/admin-nova-reserva', methods=['GET', 'POST'])
+def admin_nova_reserva():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    
+    if session.get('role') != 'admin':
+        return redirect(url_for('home'))
+
+    if request.method == 'POST':
+        # Captura os dados do formulário
+        user_id = request.form['user_id']
+        data = request.form['data']
+        hora_inicio = request.form['hora_inicio']
+        hora_fim = request.form['hora_fim']
+        tipo_reserva = request.form['tipo_reserva']
+
+        # Buscar todas as reservas existentes
+        reservas_existentes = db.child("reservas").get().val()
+
+        # Verificar se há conflito de horário com as reservas existentes
+        if reservas_existentes and verifica_conflito(data, hora_inicio, hora_fim, tipo_reserva, reservas_existentes):
+            flash("RESERVA NÃO SALVA: Conflito de horário! Já existe uma reserva nesse horário, para a quadra, ou nesse dia, para o caso das churrasqueiras e do salão.")
+            return redirect(url_for('home'))
+
+        # Verificar se a hora de término é maior que a hora de início
+        if hora_fim <= hora_inicio:
+            flash("RESERVA NÃO SALVA: A hora de término deve ser maior que a hora de início.")
+            return redirect(url_for('admin_nova_reserva'))
+
+        # Buscar o apelido do usuário no banco de dados
+        user_info = db.child("users").child(user_id).get().val()
+        apelido = user_info.get('apelido', 'Sem Apelido')  # Usa o apelido ou 'Sem Apelido' se não encontrar
+
+        # Criar a nova reserva usando o apelido do usuário
+        nova_reserva = {
+            "nome": apelido,
+            "data": data,
+            "hora_inicio": hora_inicio,
+            "hora_fim": hora_fim,
+            "tipo_reserva": tipo_reserva,
+            "user_id": user_id  # Atribui o ID do usuário selecionado à reserva
+        }
+
+        # Armazenar a reserva no banco de dados
+        db.child("reservas").push(nova_reserva)
+        
+        flash(f"Reserva criada para {apelido} com sucesso!")
+        return redirect(url_for('admin_nova_reserva'))
+
+    # Carregar todos os usuários para o dropdown
+    usuarios = db.child("users").get().val()
+
+    return render_template('admin_nova_reserva.html', usuarios=usuarios)
+
 @app.context_processor
 def inject_today_date():
     return {'date_today': datetime.now().strftime('%Y-%m-%d')}
