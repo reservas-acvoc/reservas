@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}
+Nova Reserva para Usuário
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Criar Nova Reserva para Usuário</h2>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert alert-warning" role="alert">
+                {{ messages[0] }}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <form action="{{ url_for('admin_nova_reserva') }}" method="POST">
+        <div class="mb-3">
+            <label for="user_id" class="form-label">Selecionar Usuário:</label>
+            <select id="user_id" name="user_id" class="form-select" required>
+                {% for uid, user in usuarios.items() %}
+                    <option value="{{ uid }}">{{ user.apelido }} - {{ user.email }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="data" class="form-label">Data:</label>
+            <input type="date" id="data" name="data" class="form-control" required min="{{ date_today }}">
+        </div>
+        <div class="mb-3">
+            <label for="hora_inicio" class="form-label">Horário de Início:</label>
+            <input type="time" id="hora_inicio" name="hora_inicio" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="hora_fim" class="form-label">Horário de Término:</label>
+            <input type="time" id="hora_fim" name="hora_fim" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="tipo_reserva" class="form-label">Tipo de Reserva:</label>
+            <select id="tipo_reserva" name="tipo_reserva" class="form-select" required>
+                <option value="tenis">Quadra de Tênis</option>
+                <option value="poliesportiva">Quadra Poliesportiva</option>
+                <option value="salao">Salão de Festas</option>
+                <option value="churrasqueira_piscina">Churrasqueira da Piscina</option>
+                <option value="churrasqueira_estacionamento">Churrasqueira do Estacionamento</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Criar Reserva</button>
+    </form>
+</div>
+{% endblock %}
