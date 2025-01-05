@@ -42,6 +42,14 @@ def verifica_conflito(data, hora_inicio_nova, hora_fim_nova, tipo_reserva_nova, 
                 if reserva['tipo_reserva'] == tipo_reserva_nova:
                     return True  # Conflito: uma reserva por dia nesses tipos
 
+           # Verificar se a mesma pessoa está reservando tanto para churrasqueira da pisina quanto para salão de festas e
+            # verificar se a mesma pessoa está reservando tanto para churrasqueira da piscina quanto a churrasqueira do estacionamento
+            if reserva['user_id'] == user_id_nova and user_id_nova != 'D12PCNwgz9WmNFafMwtnFlzwvNb2':
+                if reserva['tipo_reserva'] in ['salao', 'ch_estac'] and tipo_reserva_nova == 'ch_piscina':
+                    return True  # Conflito: mesma pessoa reservando paraa salão ou churrasq estac e churrasqueira da piscina
+                elif reserva['tipo_reserva'] == 'ch_piscina' and tipo_reserva_nova in ['salao', 'ch_estac']:
+                    return True  # Conflito: mesma pessoa reservando para churrasqueira da piscina e salão ou churrasqueira do estacionamento
+
             # Verificar conflito de horário para outras instalações (quadras, etc.)
             if reserva['tipo_reserva'] == tipo_reserva_nova:
                 # Verifica se os horários se sobrepõem
