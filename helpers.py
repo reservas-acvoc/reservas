@@ -29,7 +29,7 @@ def enviar_email(sender_email,receiver_email, conteudo, assunto, sg):
         print(f"Erro ao enviar e-mail: {e}")
 
 # Função para verificar conflito de horário
-def verifica_conflito(data, hora_inicio_nova, hora_fim_nova, tipo_reserva_nova, reservas):
+def verifica_conflito(data, hora_inicio_nova, hora_fim_nova, tipo_reserva_nova, user_id_nova, reservas):
     for reserva in reservas.values():
         # Verifica se a reserva é no mesmo dia
         if reserva['data'] == data:
