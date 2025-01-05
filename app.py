@@ -191,8 +191,8 @@ def nova_reserva():
     reservas_existentes = db.child("reservas").get().val()
 
     # Verificar se há conflito de horário com as reservas existentes
-    if reservas_existentes and verifica_conflito(data, hora_inicio, hora_fim, tipo_reserva, reservas_existentes):
-        flash("RESERVA NÃO SALVA: Conflito de horário! Já existe uma reserva nesse horário, para a quadra, ou nesse dia, para o caso das churrasqueiras e do salão.")
+    if reservas_existentes and verifica_conflito(data, hora_inicio, hora_fim, tipo_reserva, user_id, reservas_existentes):
+        flash("RESERVA NÃO SALVA: Conflito de horário! Já existe uma reserva nesse horário, para a quadra, ou nesse dia, para o caso das churrasqueiras e do salão. Ademais, um mesmo usuário não pode reservar churraqueira da piscina e salão/churrasqueira do estacionamento no mesmo dia.")
         return redirect(url_for('home'))
 
     # Verificar se a hora de término é maior que a hora de início
