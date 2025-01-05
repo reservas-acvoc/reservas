@@ -486,7 +486,7 @@ def instalacoes():
     # Lista de instalações com os nomes e os caminhos das imagens
     instalacoes = [
         {"nome": "Quadra de Tênis", "imagem": "tenis.jpg"},
-        {"nome": "Quadra Poliesportiva", "imagem": "poliesportiva.jpg"},
+        {"nome": "Quadra Poliesportiva", "imagem": "poliesportiva2.jpg"},
         {"nome": "Salão de Festas", "imagem": "salao.jpg"},
         {"nome": "Churrasqueira da Piscina", "imagem": "ch_piscina.jpg"},
         {"nome": "Churrasqueira do Estacionamento", "imagem": "ch_estac.jpg"},
