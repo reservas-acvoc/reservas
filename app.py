@@ -192,7 +192,7 @@ def nova_reserva():
 
     # Verificar se há conflito de horário com as reservas existentes
     if reservas_existentes and verifica_conflito(data, hora_inicio, hora_fim, tipo_reserva, user_id, reservas_existentes):
-        flash("RESERVA NÃO SALVA: Conflito de horário! Já existe uma reserva nesse horário, para a quadra, ou nesse dia, para o caso das churrasqueiras e do salão. Ademais, um mesmo usuário não pode reservar churraqueira da piscina e salão/churrasqueira do estacionamento no mesmo dia.")
+        flash("RESERVA NÃO SALVA: Conflito detectado! Já existe reserva nesse horário (quadras), nesse dia (salão, churrasqueiras ou pergolado), ou em dias próximos (mesma instalação não pode ser reservada também nos 2 dias anteriores).")
         return redirect(url_for('home'))
 
     # Verificar se a hora de término é maior que a hora de início
@@ -515,7 +515,7 @@ def admin_nova_reserva():
 
         # Verificar se há conflito de horário com as reservas existentes
         if reservas_existentes and verifica_conflito(data, hora_inicio, hora_fim, tipo_reserva, reservas_existentes):
-            flash("RESERVA NÃO SALVA: Conflito de horário! Já existe uma reserva nesse horário, para a quadra, ou nesse dia, para o caso das churrasqueiras e do salão.")
+            flash("RESERVA NÃO SALVA: Conflito detectado! Já existe reserva nesse horário (quadras), nesse dia (salão, churrasqueiras ou pergolado), ou em dias próximos (mesma instalação não pode ser reservada também no dia anterior ou no dia seguinte).")
             return redirect(url_for('home'))
 
         # Verificar se a hora de término é maior que a hora de início
